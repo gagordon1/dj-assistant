@@ -12,5 +12,6 @@ TEST_LINKS = [
     "https://www.youtube.com/watch?v=ov4WobPqoSA&ab_channel=KendrickLamar-Topic",
     "https://www.youtube.com/watch?v=4SPqzC6RkbQ&ab_channel=WakaFlockaFlame-Topic",
     "https://www.youtube.com/watch?v=U2waT9TxPU0&ab_channel=AtlanticRecords",
-    "https://www.youtube.com/watch?v=CcCw1ggftuQ"
+    "https://www.youtube.com/watch?v=CcCw1ggftuQ",
+    "https://www.youtube.com/watch?v=1-pUaogoX5o"
 ]
