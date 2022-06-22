@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+output/
+pretrained_models/
+ydl/
+splits/
+.DS_Store
