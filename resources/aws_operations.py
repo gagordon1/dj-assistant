@@ -14,7 +14,7 @@ returns : True if successful upload, False otherwise
 def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, bucket, verbose = False):
     try:
         if verbose:
-            print("uploading to bucket...")
+            print("uploading {} to bucket...".format(file_path))
         s3 = boto3.resource('s3',
             aws_access_key_id=access_id,
             aws_secret_access_key= access_key)
