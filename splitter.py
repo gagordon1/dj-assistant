@@ -1,5 +1,8 @@
 from spleeter.separator import Separator
 import scipy.io.wavfile
+import logging
+import tensorflow as tf
+tf.get_logger().setLevel(logging.ERROR)
 
 # can we get from youtube link to output?
 SAMPLE_RATE = 44100
@@ -22,6 +25,7 @@ def split_file(filename, destination_path, method="spleeter:2stems", verbose = F
         filename_format= "{instrument}.{codec}",  codec="mp3")
 
 if __name__ == '__main__':
-    input_file = "ydl/3dedc6c2-d3bd-4451-9382-ea7462e5c7d6/Flo Rida - Right Round (feat. Ke$ha) [US Version] (Official Video).mp3"
-    dest_path = "./splits/MP3test"
-    split_file(input_file, dest_path)
+    # input_file = "ydl/3dedc6c2-d3bd-4451-9382-ea7462e5c7d6/Flo Rida - Right Round (feat. Ke$ha) [US Version] (Official Video).mp3"
+    # dest_path = "./splits/MP3test"
+    # split_file(input_file, dest_path)
+    pass

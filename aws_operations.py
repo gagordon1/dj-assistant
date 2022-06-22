@@ -26,7 +26,7 @@ def upload_to_amazon_bucket(file_path, bucket_file_path, verbose = False):
             file_path,
             bucket_file_path,
             ExtraArgs = {
-                "ContentType" : "audio/wav"
+                "ContentType" : "audio/mp3"
                 }
             )
         return True
