@@ -4,8 +4,7 @@ class MyLogger(object):
     def __init__(self, verbose = False):
         self.verbose = verbose
     def debug(self, msg):
-        if self.verbose:
-            print(msg)
+        pass
 
     def warning(self, msg):
         if self.verbose:
