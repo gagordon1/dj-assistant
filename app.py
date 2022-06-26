@@ -1,12 +1,20 @@
 from flask import Flask, request
-from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_file
+from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_files_older_than
 from dotenv import load_dotenv
 import uuid
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask_cors import CORS
 
+SECONDS_IN_A_DAY = 86400
 load_dotenv()
 
 app = Flask(__name__)
 PORT=8000
+
+CORS(app)
+
 
 @app.route('/')
 def home():
@@ -76,4 +84,24 @@ def download():
         return "Supplied link could not be split", 400
 
 if __name__ == "__main__":
-    app.run(debug=True, port=PORT)
+    def garbage_collection():
+        print("Starting Garbage Collection...")
+        print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
+        #delete items that have been in the database for longer than x seconds
+        delete_files_older_than(get_one_day_ago())
+
+
+
+    def get_one_day_ago():
+        return time.time() - SECONDS_IN_A_DAY
+
+    garbage_collection()
+
+    # scheduler = BackgroundScheduler()
+    # scheduler.add_job(func=garbage_collection, trigger="interval", seconds=5)
+    # scheduler.start()
+    # #
+    # # Shut down the scheduler when exiting the app
+    # atexit.register(lambda: scheduler.shutdown())
+    #
+    # app.run(debug=False, port=PORT)

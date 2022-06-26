@@ -1,14 +1,28 @@
 import boto3
+from boto3.dynamodb.conditions import Key, Attr
 import time
 import os
 from dotenv import load_dotenv
 import json
+from decimal import Decimal
+
+CACHE_TABLE_NAME = 'dj-assistant-stem-cache'
 load_dotenv()
 
 def clean_url(url):
     if url[-1] == "/":
         url = url[:-1]
     return url
+
+def delete_dynamodb_item(key, region):
+    dynamodb = boto3.client("dynamodb", region_name=region)
+    response = dynamodb.delete_item(TableName=CACHE_TABLE_NAME,
+        Key={
+            'url' : {'S' : key}
+        }
+    )
+    print(response)
+
 
 """
 Given an s3 key, remove it from our database
@@ -86,7 +100,7 @@ def upload_to_dynamo_cache(url, links, region, verbose = False):
 
     url = clean_url(url)
 
-    dynamodb.put_item(TableName='dj-assistant-stem-cache',
+    dynamodb.put_item(TableName=CACHE_TABLE_NAME,
          ReturnValues="ALL_OLD",
          Item={
             'url':{'S':url},
@@ -114,7 +128,7 @@ def get_from_dynamo_cache(url, type, region, verbose = False):
     try:
         url = clean_url(url)
         dynamodb = boto3.client("dynamodb", region_name=region)
-        result = dynamodb.get_item(TableName='dj-assistant-stem-cache',
+        result = dynamodb.get_item(TableName=CACHE_TABLE_NAME,
             Key={
                 "url" : {"S" : url}
             }
@@ -142,6 +156,18 @@ def get_from_dynamo_cache(url, type, region, verbose = False):
         return False
 
 
+"""
+timestamp : time for which older items can be removed from the system
+"""
+def get_killable_items(timestamp):
+    table = boto3.resource('dynamodb').Table(CACHE_TABLE_NAME)
+    fe = Attr('timestamp_added').lt(Decimal(str(timestamp)))
+    response = table.scan(
+        FilterExpression=fe
+    )
+    return response['Items']
 
 if __name__ == '__main__':
+    # timestamp = get_one_day_ago()
+    # killable = get_killable_items(timestamp)
     pass

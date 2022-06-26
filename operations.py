@@ -1,6 +1,6 @@
 from resources.youtube import download
 from resources.splitter import split_file
-from resources.aws_operations import upload_to_amazon_bucket, upload_to_dynamo_cache, get_from_dynamo_cache, delete_amazon_bucket_file
+from resources.aws_operations import upload_to_amazon_bucket, upload_to_dynamo_cache, get_from_dynamo_cache, delete_amazon_bucket_file, get_killable_items, delete_dynamodb_item
 import os
 import shutil
 
@@ -10,6 +10,7 @@ ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 ACCESS_ID = os.getenv("AWS_ACCESS_KEY_ID")
 REGION = os.getenv("AWS_DEFAULT_REGION")
 BUCKET = os.getenv("BUCKET_NAME")
+
 
 
 """
@@ -127,11 +128,14 @@ def delete_file(link, verbose=VERBOSE):
         print(e)
         return False
 
+def delete_files_older_than(timestamp):
+    killable = get_killable_items(timestamp)
+    for item in killable:
+        delete_file(item["master"]) #REMOVE S3 FILE
+        delete_dynamodb_item(item["url"], REGION) #remove cache file
 
 
 
 
 if __name__ == '__main__':
-    # link = "https://dj-assistant-stems.s3.ca-central-1.amazonaws.com/stems/30d135d5-f7a8-42ea-9f6c-c0b4557e0dd7/master.mp3"
-    # delete_file(link)
     pass
