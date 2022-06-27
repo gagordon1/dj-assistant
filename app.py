@@ -1,5 +1,5 @@
 from flask import Flask, request
-from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_files_older_than
+from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_file, delete_files_older_than
 from dotenv import load_dotenv
 import uuid
 import time
@@ -95,13 +95,11 @@ if __name__ == "__main__":
     def get_one_day_ago():
         return time.time() - SECONDS_IN_A_DAY
 
-    garbage_collection()
-
-    # scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=garbage_collection, trigger="interval", seconds=5)
-    # scheduler.start()
-    # #
-    # # Shut down the scheduler when exiting the app
-    # atexit.register(lambda: scheduler.shutdown())
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=garbage_collection, trigger="interval", seconds=SECONDS_IN_A_DAY)
+    scheduler.start()
     #
-    # app.run(debug=False, port=PORT)
+    # Shut down the scheduler when exiting the app
+    atexit.register(lambda: scheduler.shutdown())
+
+    app.run(debug=False, port=PORT)

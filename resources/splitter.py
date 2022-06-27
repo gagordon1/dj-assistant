@@ -18,7 +18,7 @@ both into destination path
 """
 def split_file(filename, destination_path, method="spleeter:2stems", verbose = False):
     if(verbose):
-        print("splitting file...")
+        print("splitting file {} to {}...".format(filename, destination_path))
     # Using embedded configuration.
     separator = Separator(method)
     prediction = separator.separate_to_file(filename, destination_path,
