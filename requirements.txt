@@ -1,2 +1,9 @@
+APScheduler==3.9.1
+boto3==1.24.14
+Flask==2.1.2
+Flask_Cors==3.0.10
+python-dotenv==0.20.0
+scipy==1.8.1
 spleeter==2.3.1
-youtube_dl==2021.12.17
+tensorflow==2.5.0
+yt_dlp==2022.6.22.1

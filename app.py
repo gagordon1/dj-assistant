@@ -6,6 +6,7 @@ import time
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS
+from resources.youtube import youtube_search
 
 SECONDS_IN_A_DAY = 86400
 load_dotenv()
@@ -82,6 +83,27 @@ def download():
         #delete created local files
         print(e)
         return "Supplied link could not be split", 400
+
+"""
+params :
+    query : youtube search to be made (spaces encoded by %20)
+response :
+    200 : {
+        master : link to master mp3 file
+    }
+    400 : supplied link could not be returned
+"""
+@app.route('/youtube-search/')
+def search():
+    try:
+        query = request.args.get("query")
+        query.replace("%20", " ")
+        return youtube_search(query)
+
+    except Exception as e:
+        #delete created local files
+        print(e)
+        return "Youtube search could not be made", 400
 
 if __name__ == "__main__":
     def garbage_collection():
