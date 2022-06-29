@@ -50,13 +50,13 @@ Given a query, returns a list of video objects of the form :
 """
 def youtube_search(query):
     videos = VideosSearch(query, limit=5)
-    return {"result" : list(map(lambda x : {
+    return list(map(lambda x : {
         "title" : x["title"],
         "channelId" : x["channel"]["id"],
         "id" : x["id"],
         "thumbnail" : x["thumbnails"][0]["url"]
     },
-    videos.result()["result"]))}
+    videos.result()["result"]))
 
 
 if __name__ == '__main__':

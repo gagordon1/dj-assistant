@@ -25,7 +25,7 @@ def delete_dynamodb_item(key, region):
 
 
 """
-Given an s3 key, remove it from our database
+Given an s3 key, remove each audio file along with their associated download file
 
 key : key to an s3 resource
 """
@@ -37,6 +37,7 @@ def delete_amazon_bucket_file(access_key, access_id, bucket, key, verbose=False)
         aws_secret_access_key= access_key)
     for file in ["/vocals.mp3", "/accompaniment.mp3", "/master.mp3"]:
         result = s3.Object(bucket, key + file).delete()
+        result = s3.Object(bucket, key + file + "/download.mp3").delete() #delete associated downloadable file
     if result:
         return True
     else:
@@ -45,6 +46,7 @@ def delete_amazon_bucket_file(access_key, access_id, bucket, key, verbose=False)
 
 """
 Uploads an mp3 file to an aws bucket
+Also uploads a downloadable version with "/download.mp3" suffix
 
 file_path : input file path
 bucket_file_path : desired filepath in the bucket
@@ -67,6 +69,10 @@ def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, 
             ExtraArgs = {
                 "ContentType" : "audio/mp3"
                 }
+            )
+        s3.Bucket(bucket).upload_file(
+            file_path,
+            bucket_file_path + "/download.mp3"
             )
         return True
     except Exception as e:

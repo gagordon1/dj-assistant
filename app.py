@@ -88,22 +88,61 @@ def download():
 params :
     query : youtube search to be made (spaces encoded by %20)
 response :
-    200 : {
-        master : link to master mp3 file
+    200 : {result :
+    {
+        title : String,
+        channelId : String
+        id : String,
+        thumbnail : String
+
     }
-    400 : supplied link could not be returned
+}
+    400 : Youtube search could not be made
 """
 @app.route('/youtube-search/')
 def search():
     try:
         query = request.args.get("query")
         query.replace("%20", " ")
-        return youtube_search(query)
+        return {"result" : youtube_search(query)}
 
     except Exception as e:
         #delete created local files
         print(e)
         return "Youtube search could not be made", 400
+
+
+
+"""
+params :
+    query : youtube searchs to be made (spaces encoded by %20)
+    parameters separated by "%&"
+response :
+    200 : {result :[
+                        {
+                            title : String,
+                            channelId : String
+                            id : String,
+                            thumbnail : String
+
+                        },
+                    ]
+}
+    400 : Youtube searches could not be made
+"""
+def batch_search():
+    try:
+        query = request.args.get("query")
+        out = []
+        for search in query.split("%&"):
+            query.replace("%20", " ")
+            return youtube_search(query)
+
+    except Exception as e:
+        #delete created local files
+        print(e)
+        return "Youtube search could not be made", 400
+
 
 if __name__ == "__main__":
     def garbage_collection():
@@ -117,6 +156,7 @@ if __name__ == "__main__":
     def get_one_day_ago():
         return time.time() - SECONDS_IN_A_DAY
 
+    # garbage_collection()
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=garbage_collection, trigger="interval", seconds=SECONDS_IN_A_DAY)
     scheduler.start()
