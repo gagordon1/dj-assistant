@@ -30,20 +30,22 @@ def download_split_upload(url, pathname):
 
         stem_local_path = "stems/" + pathname
 
-        split_file(ydl_path + "/" + os.listdir(ydl_path)[0], stem_local_path, verbose = VERBOSE)
+        download_name = os.listdir(ydl_path)[0]
+
+        split_file(ydl_path + "/" + download_name, stem_local_path, verbose = VERBOSE)
 
         #for master track
-        bucket_file_path_master =  stem_local_path +"/master.mp3"
+        bucket_file_path_master =  stem_local_path +"/{}-master.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(ydl_path + "/" + os.listdir(ydl_path)[0],
                 bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
         #for vocals
-        bucket_file_path_vocals =  stem_local_path +"/vocals.mp3"
+        bucket_file_path_vocals =  stem_local_path +"/{}-vocals.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/vocals.mp3",
                 bucket_file_path_vocals, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
         #for accompaniment
-        bucket_file_path_accompaniment =  stem_local_path +"/accompaniment.mp3"
+        bucket_file_path_accompaniment =  stem_local_path +"/{}-accompaniment.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/accompaniment.mp3",
                 bucket_file_path_accompaniment, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
@@ -71,9 +73,10 @@ def download_upload(url, pathname):
     try:
         ydl_path = "ydl/" + pathname
         download(url, ydl_path, verbose = VERBOSE)
+        download_name = os.listdir(ydl_path)[0]
 
-        bucket_file_path_master =  "masters/" + pathname +"/master.mp3"
-        uploaded = upload_to_amazon_bucket(ydl_path + "/" + os.listdir(ydl_path)[0],
+        bucket_file_path_master =  "masters/" + pathname +"/{}-master.mp3".format(download_name)
+        uploaded = upload_to_amazon_bucket(ydl_path + "/" + download_name,
                 bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
         shutil.rmtree(ydl_path)
         return {"master" : AWS_BUCKET_ADDRESS + bucket_file_path_master}

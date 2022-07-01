@@ -60,6 +60,9 @@ def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, 
     try:
         if verbose:
             print("uploading {} to bucket...".format(file_path))
+        name = bucket_file_path.split("/")[-1]
+        print(name)
+        disposition = 'attachment; filename=\"' + name
         s3 = boto3.resource('s3',
             aws_access_key_id=access_id,
             aws_secret_access_key= access_key)
@@ -72,7 +75,10 @@ def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, 
             )
         s3.Bucket(bucket).upload_file(
             file_path,
-            bucket_file_path + "/download.mp3"
+            bucket_file_path + "/download.mp3",
+            ExtraArgs = {
+                "ContentDisposition" : disposition
+                }
             )
         return True
     except Exception as e:
