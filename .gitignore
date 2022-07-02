@@ -129,7 +129,6 @@ dmypy.json
 .pyre/
 
 output/
-pretrained_models/
 ydl/
 stems/
 .DS_Store
