@@ -1,5 +1,4 @@
 from spleeter.separator import Separator
-import scipy.io.wavfile
 import logging
 import tensorflow as tf
 tf.get_logger().setLevel(logging.ERROR)
