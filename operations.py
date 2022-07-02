@@ -60,6 +60,7 @@ def download_split_upload(url, pathname):
     except Exception as e:
         shutil.rmtree(ydl_path)
         shutil.rmtree(stem_local_path)
+        print(e)
         raise e
 
 """
