@@ -168,4 +168,4 @@ if __name__ == "__main__":
     if DEVELOPMENT:
         app.run(debug=True, port=PORT)
     else:
-        app.run(host="0.0.0.0" debug=False, port=PORT)
+        app.run(host="0.0.0.0", debug=False, port=PORT)
