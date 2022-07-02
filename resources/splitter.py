@@ -1,7 +1,5 @@
 from spleeter.separator import Separator
 import logging
-import tensorflow as tf
-tf.get_logger().setLevel(logging.ERROR)
 
 # can we get from youtube link to output?
 SAMPLE_RATE = 44100

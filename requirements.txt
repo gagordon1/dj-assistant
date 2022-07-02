@@ -4,6 +4,5 @@ Flask==2.0.3
 Flask_Cors==3.0.10
 python-dotenv==0.20.0
 spleeter==2.3.1
-tensorflow==2.5.0
 youtube_search_python==1.6.6
 yt_dlp==2022.6.22.1
