@@ -18,8 +18,10 @@ def split_file(filename, destination_path, method="spleeter:2stems", verbose = F
         print("splitting file {} to {}...".format(filename, destination_path))
     # Using embedded configuration.
     separator = Separator(method)
+    print(separator)
     prediction = separator.separate_to_file(filename, destination_path,
         filename_format= "{instrument}.{codec}",  codec="mp3")
+    print(prediction)
 
 if __name__ == '__main__':
     # input_file = "ydl/3dedc6c2-d3bd-4451-9382-ea7462e5c7d6/Flo Rida - Right Round (feat. Ke$ha) [US Version] (Official Video).mp3"
