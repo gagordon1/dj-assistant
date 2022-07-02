@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 PORT=8000
 
-DEVELOPMENT = True
+DEVELOPMENT = False
 CORS(app)
 
 
