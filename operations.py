@@ -31,6 +31,7 @@ def download_split_upload(url, pathname):
         stem_local_path = "stems/" + pathname
 
         download_name = os.listdir(ydl_path)[0]
+        print(download_name)
 
         split_file(ydl_path + "/" + download_name, stem_local_path, verbose = VERBOSE)
 
