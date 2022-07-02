@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 PORT=8000
 
-DEVELOPMENT = False
+DEVELOPMENT = True
 CORS(app)
 
 
@@ -83,7 +83,7 @@ def download():
     except Exception as e:
         #delete created local files
         print(e)
-        return "Supplied link could not be split", 400
+        return "Supplied link could not be downloaded", 400
 
 """
 params :
