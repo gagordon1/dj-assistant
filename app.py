@@ -14,6 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 PORT=8000
 
+DEVELOPMENT = False
 CORS(app)
 
 
@@ -164,4 +165,7 @@ if __name__ == "__main__":
     # Shut down the scheduler when exiting the app
     atexit.register(lambda: scheduler.shutdown())
 
-    app.run(debug=False, port=PORT)
+    if DEVELOPMENT:
+        app.run(debug=True, port=PORT)
+    else:
+        app.run(host="0.0.0.0" debug=False, port=PORT)
