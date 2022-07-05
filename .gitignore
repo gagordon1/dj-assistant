@@ -132,3 +132,4 @@ output/
 ydl/
 stems/
 .DS_Store
+pretrained_models/

@@ -7,6 +7,7 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS
 from resources.youtube import youtube_search
+import logging
 
 SECONDS_IN_A_DAY = 86400
 load_dotenv()
@@ -168,4 +169,9 @@ if __name__ == "__main__":
     if DEVELOPMENT:
         app.run(debug=True, port=PORT)
     else:
+        garbage_collection()
+        gunicorn_error_logger = logging.getLogger('gunicorn.error')
+        app.logger.handlers.extend(gunicorn_error_logger.handlers)
+        app.logger.setLevel(logging.DEBUG)
+        app.logger.debug('this will show in the log')
         app.run(host="0.0.0.0", debug=False, port=PORT)
