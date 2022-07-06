@@ -1,6 +1,8 @@
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
 
+MAX_FILE_DURATION = 600 # 10 minutes
+
 class MyLogger(object):
     def __init__(self, verbose = False):
         self.verbose = verbose
@@ -25,6 +27,7 @@ def download(url, output_path, verbose = False):
     ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': '{}/%(title)s.%(ext)s'.format(output_path),
+    # 'max_filesize' : "50m",
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -33,6 +36,9 @@ def download(url, output_path, verbose = False):
     'logger': MyLogger(verbose),
     }
     with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
+        if int(info["duration"]) > MAX_FILE_DURATION:
+            raise Exception("File is longer than {} seconds".format(MAX_FILE_DURATION))
         if verbose:
             print("Downloading: {}".format(url))
         return ydl.download([url])
