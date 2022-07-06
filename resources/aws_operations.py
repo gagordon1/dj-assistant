@@ -21,7 +21,6 @@ def delete_dynamodb_item(key, region):
             'url' : {'S' : key}
         }
     )
-    print(response)
 
 
 """

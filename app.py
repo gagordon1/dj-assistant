@@ -172,6 +172,6 @@ if __name__ == "__main__":
         garbage_collection()
         gunicorn_error_logger = logging.getLogger('gunicorn.error')
         app.logger.handlers.extend(gunicorn_error_logger.handlers)
-        app.logger.setLevel(logging.DEBUG)
-        app.logger.debug('this will show in the log')
+        app.logger.setLevel(logging.ERROR)
+        app.logger.error('this will show in the log')
         app.run(host="0.0.0.0", debug=False, port=PORT)
