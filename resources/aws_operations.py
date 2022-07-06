@@ -34,9 +34,12 @@ def delete_amazon_bucket_file(access_key, access_id, bucket, key, verbose=False)
     s3 = boto3.resource('s3',
         aws_access_key_id=access_id,
         aws_secret_access_key= access_key)
-    for file in ["/vocals.mp3", "/accompaniment.mp3", "/master.mp3"]:
-        result = s3.Object(bucket, key + file).delete()
-        result = s3.Object(bucket, key + file + "/download.mp3").delete() #delete associated downloadable file
+    if verbose:
+        print("     " + key +  "...")
+        print("     " + key + "/download.mp3...")
+    result = s3.Object(bucket, key).delete()
+    result = s3.Object(bucket, key + "/download.mp3").delete() #delete associated downloadable file
+
     if result:
         return True
     else:

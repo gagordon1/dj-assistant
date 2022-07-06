@@ -10,3 +10,9 @@ to end a process use "kill {PID}"
 
 run new process:
 gunicorn --workers=4 --bind=0.0.0.0 --timeout=180 --log-level=error app:app
+
+
+View Process logs: 
+tail -f /proc/<pid>/fd/1
+
+

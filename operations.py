@@ -36,17 +36,17 @@ def download_split_upload(url, pathname):
         split_file(ydl_path + "/" + download_name, stem_local_path, verbose = VERBOSE)
 
         #for master track
-        bucket_file_path_master =  stem_local_path +"/{}-master.mp3".format(download_name.strip(".mp3"))
+        bucket_file_path_master =  pathname +"/{}-master.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(ydl_path + "/" + os.listdir(ydl_path)[0],
                 bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
         #for vocals
-        bucket_file_path_vocals =  stem_local_path +"/{}-vocals.mp3".format(download_name.strip(".mp3"))
+        bucket_file_path_vocals =  pathname +"/{}-vocals.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/vocals.mp3",
                 bucket_file_path_vocals, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
         #for accompaniment
-        bucket_file_path_accompaniment =  stem_local_path +"/{}-accompaniment.mp3".format(download_name.strip(".mp3"))
+        bucket_file_path_accompaniment =  pathname +"/{}-accompaniment.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/accompaniment.mp3",
                 bucket_file_path_accompaniment, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
 
@@ -77,7 +77,7 @@ def download_upload(url, pathname):
         download(url, ydl_path, verbose = VERBOSE)
         download_name = os.listdir(ydl_path)[0]
 
-        bucket_file_path_master =  "masters/" + pathname +"/{}-master.mp3".format(download_name)
+        bucket_file_path_master = pathname +"/{}-master.mp3".format(download_name)
         uploaded = upload_to_amazon_bucket(ydl_path + "/" + download_name,
                 bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
         shutil.rmtree(ydl_path)
@@ -136,8 +136,10 @@ def delete_file(link, verbose=VERBOSE):
 def delete_files_older_than(timestamp):
     killable = get_killable_items(timestamp)
     for item in killable:
-        delete_file(item["master"]) #REMOVE S3 FILE
         delete_dynamodb_item(item["url"], REGION) #remove cache file
+        for type in ["master", "vocals", "accompaniment"]:
+            if item[type]:
+                delete_file(item[type]) #REMOVE S3 FILE
 
 
 
