@@ -1,6 +1,5 @@
 from flask import Flask, request
-from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_file, delete_files_older_than
-from dotenv import load_dotenv
+from operations import download_split_upload, download_upload, add_to_cache, get_from_cache, delete_file
 import uuid
 import time
 import atexit
@@ -8,9 +7,13 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask_cors import CORS
 from resources.youtube import youtube_search
 import logging
+from garbage_collection import garbage_collection
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 SECONDS_IN_A_DAY = 86400
-load_dotenv()
 
 app = Flask(__name__)
 PORT=8000
@@ -147,18 +150,7 @@ def batch_search():
 
 
 if __name__ == "__main__":
-    def garbage_collection():
-        print("Starting Garbage Collection...")
-        print(time.strftime("%A, %d. %B %Y %I:%M:%S %p"))
-        #delete items that have been in the database for longer than x seconds
-        delete_files_older_than(get_one_day_ago())
 
-
-
-    def get_one_day_ago():
-        return time.time() - SECONDS_IN_A_DAY
-
-    # garbage_collection()
     scheduler = BackgroundScheduler()
     scheduler.add_job(func=garbage_collection, trigger="interval", seconds=SECONDS_IN_A_DAY)
     scheduler.start()
