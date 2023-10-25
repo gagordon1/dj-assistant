@@ -37,8 +37,8 @@ def download(url, output_path, verbose = False):
     }
     with YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
-        if int(info["duration"]) > MAX_FILE_DURATION:
-            raise Exception("File is longer than {} seconds".format(MAX_FILE_DURATION))
+        # if int(info["duration"]) > MAX_FILE_DURATION:
+        #     raise Exception("File is longer than {} seconds".format(MAX_FILE_DURATION))
         if verbose:
             print("Downloading: {}".format(url))
         return ydl.download([url])
@@ -66,7 +66,6 @@ def youtube_search(query):
 
 
 if __name__ == '__main__':
-    #download("https://www.youtube.com/watch?v=HYMDfMMD3fw", "ydl_test.mp3")
+    download("https://www.youtube.com/watch?v=HYMDfMMD3fw", "ydl_test.mp3")
     # out = search("Everyday we lit")
     # print(out)
-    pass

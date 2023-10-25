@@ -9,6 +9,7 @@ from decimal import Decimal
 CACHE_TABLE_NAME = 'dj-assistant-stem-cache'
 load_dotenv()
 
+
 def clean_url(url):
     if url[-1] == "/":
         url = url[:-1]
@@ -42,7 +43,6 @@ def delete_amazon_bucket_file(access_key, access_id, bucket, key, verbose=False)
     else:
         return False
 
-
 """
 Uploads an mp3 file to an aws bucket
 Also uploads a downloadable version with "/download.mp3" suffix
@@ -55,7 +55,7 @@ bucket : name of s3 bucket
 
 returns : True if successful upload, False otherwise
 """
-def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, bucket, verbose = False):
+def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, bucket, region, verbose = False):
     try:
         if verbose:
             print("uploading {} to bucket...".format(file_path))
@@ -64,7 +64,13 @@ def upload_to_amazon_bucket(file_path, bucket_file_path, access_key, access_id, 
         disposition = 'attachment; filename=\"' + name
         s3 = boto3.resource('s3',
             aws_access_key_id=access_id,
-            aws_secret_access_key= access_key)
+            aws_secret_access_key= access_key,
+            region_name=region
+            )
+        if verbose:
+            print("connected to bucket",file_path, bucket_file_path, access_key, access_id, bucket, region)
+            print("\n\n")
+
         s3.Bucket(bucket).upload_file(
             file_path,
             bucket_file_path,
@@ -102,6 +108,7 @@ def upload_to_dynamo_cache(url, links, region, verbose = False):
     if verbose:
         print("adding to dynamo cache")
     dynamodb = boto3.client("dynamodb", region_name=region)
+    print(region)
     vocals = ""
     accompaniment = ""
     if "vocals" in links:

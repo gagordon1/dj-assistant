@@ -18,7 +18,7 @@ SECONDS_IN_A_DAY = 86400
 app = Flask(__name__)
 PORT=8000
 
-DEVELOPMENT = False
+DEVELOPMENT = True
 CORS(app)
 
 

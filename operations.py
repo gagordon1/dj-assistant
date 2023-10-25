@@ -11,8 +11,6 @@ ACCESS_ID = os.getenv("AWS_ACCESS_KEY_ID")
 REGION = os.getenv("AWS_DEFAULT_REGION")
 BUCKET = os.getenv("BUCKET_NAME")
 
-
-
 """
 url : youtube or soundcloud link
 pathname : unique identifier for intended bucket path of the file
@@ -38,21 +36,21 @@ def download_split_upload(url, pathname):
         #for master track
         bucket_file_path_master =  pathname +"/{}-master.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(ydl_path + "/" + os.listdir(ydl_path)[0],
-                bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
+                bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, REGION, verbose = VERBOSE)
 
         #for vocals
         bucket_file_path_vocals =  pathname +"/{}-vocals.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/vocals.mp3",
-                bucket_file_path_vocals, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
+                bucket_file_path_vocals, ACCESS_KEY, ACCESS_ID, BUCKET, REGION, verbose = VERBOSE)
 
         #for accompaniment
         bucket_file_path_accompaniment =  pathname +"/{}-accompaniment.mp3".format(download_name.strip(".mp3"))
         uploaded = upload_to_amazon_bucket(stem_local_path + "/accompaniment.mp3",
-                bucket_file_path_accompaniment, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
+                bucket_file_path_accompaniment, ACCESS_KEY, ACCESS_ID, BUCKET, REGION, verbose = VERBOSE)
 
         #delete created local files
-        shutil.rmtree(ydl_path)
-        shutil.rmtree(stem_local_path)
+        # shutil.rmtree(ydl_path)
+        # shutil.rmtree(stem_local_path)
         return {
                     "master" : AWS_BUCKET_ADDRESS + bucket_file_path_master,
                     "vocals" : AWS_BUCKET_ADDRESS + bucket_file_path_vocals,
@@ -79,7 +77,7 @@ def download_upload(url, pathname):
 
         bucket_file_path_master = pathname +"/{}-master.mp3".format(download_name)
         uploaded = upload_to_amazon_bucket(ydl_path + "/" + download_name,
-                bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, verbose = VERBOSE)
+                bucket_file_path_master, ACCESS_KEY, ACCESS_ID, BUCKET, REGION,verbose = VERBOSE)
         shutil.rmtree(ydl_path)
         return {"master" : AWS_BUCKET_ADDRESS + bucket_file_path_master}
     except Exception as e:
